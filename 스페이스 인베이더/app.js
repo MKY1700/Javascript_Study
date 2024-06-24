@@ -94,15 +94,24 @@ function shoot(e) {
     let id;
     let bulletLoc = playerLoc;
     function moveBullet() {
-        stage[p].classList.remove("bullet");
-        p -= stageSize;
-        stage[p].classList.add("bullet");
+        stage[bulletLoc].classList.remove("bullet");
+        bulletLoc -= stageSize;
+        if (bulletLoc < 0) {
+            clearInterval(id);
+            return;
+        }
+        stage[bulletLoc].classList.add("bullet");
+        if (stage[bulletLoc].classList.contains("invader")) {
+            stage[bulletLoc].classList.remove("invader");
+            stage[bulletLoc].classList.remove("bullet");
+            stage[bulletLoc].classList.add("boom");
+        }
     }
     if (e.key === "ArrowUp") {
         id = setInterval(moveBullet, 300)
     }
 }
-document.addEventListener("keydown", movePlayer)
+document.addEventListener("keydown", shoot);
 
 startBtn.addEventListener("click", gameStart);
 stopBtn.addEventListener("click", gameStop);
